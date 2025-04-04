@@ -3,26 +3,32 @@ const button = document.getElementById("add-task");
 const list = document.getElementById("task-list");
 const clearButton = document.getElementById("clear-all");
 
-
 button.addEventListener("click", function () {
     const taskText = input.value.trim();
+    if (taskText === "") return;
 
-    if (taskText === "") {
-        return;
-    }
+    const allTasks = list.querySelectorAll("li");
+    allTasks.forEach(task => {
+        if (task.textContent.startsWith("new ")) {
+            task.textContent = task.textContent.replace("new ", "");
+        }
+    });
 
+    
     const newTask = document.createElement("li");
-    newTask.textContent = taskText;
+    newTask.textContent = "new " + taskText;
 
-    // ➕ Ajout du comportement de suppression au clic
+    // Supprimer la tâche au clic
     newTask.addEventListener("click", function () {
         list.removeChild(newTask);
     });
 
-    list.appendChild(newTask);
+    // ➕ Ajout en haut de la liste
+    list.insertBefore(newTask, list.firstChild);
+
     input.value = "";
 });
 
 clearButton.addEventListener("click", function () {
-    list.innerHTML = ""; // vide toute la liste
+    list.innerHTML = "";
 });
